@@ -3,12 +3,13 @@
     <!-- <arg name="markerId"        default="94"/> -->
     <arg name="marker1Id"         default="26"/>
     <arg name="marker2Id"         default="28"/>
-    <arg name="markerSize"        default="0.1"/>    <!-- in m -->
+    <arg name="markerSize"        default="0.05"/>    <!-- in m -->
     <arg name="eye"               default="left"/>
     <arg name="dct_normalization" default="True" />
     <arg name="dct_filter_size"   default="2" />
     <arg name="marker1_frame"     default="marker_hand_frame" />
     <arg name="marker2_frame"     default="marker_object_frame" />
+    <arg name="corner_refinement" default="SUBPIX"/>
 
 
     <!-- <node pkg="cv_camera" type="cv_camera_node" name="cv_camera" /> -->
@@ -37,12 +38,15 @@
         <param name="parent_name" value="stereo_gazebo_$(arg eye)_camera_optical_frame"/>
         <param name="child_name1" value="$(arg marker1_frame)" />
         <param name="child_name2" value="$(arg marker2_frame)" />
+        <param name="corner_refinement" value="$(arg corner_refinement)" />
     </node>
 
     <node pkg="image_view" type="image_view" name="image_view">
         <remap from="/image" to="/aruco_simple/result" />
-        <!-- <param name="marker_size"        value="$(arg markerSize)"/> -->
+        <param name="marker_size"        value="$(arg markerSize)"/>
     </node>
+
+    <node pkg="rostopic" type="rostopic" name="position" args="echo /aruco_simple/pose" output="screen"/>
 
 </launch>
 
